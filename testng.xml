@@ -3,8 +3,8 @@
 <suite name="All Test Suite">
     <test verbose="2" preserve-order="true" name="C:/JavaExamples/SwagLabsTests">
         <classes>
-            <class name="tests.loginPageTest.InventoryPageTest"/>
             <class name="tests.loginPageTest.LoginPageTest"/>
+            <class name="tests.loginPageTest.InventoryPageTest"/>
         </classes>
     </test>
 </suite>

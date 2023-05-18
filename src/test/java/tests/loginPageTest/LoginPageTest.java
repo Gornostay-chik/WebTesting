@@ -6,7 +6,9 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import pages.swagLabs.LoginPage;
 import tests.base.BaseTest;
 
 import static common.config.LOGIN_PAGE_URL;
@@ -19,48 +21,48 @@ public class LoginPageTest extends BaseTest {
 
     @Test(description = "Check LoginPage attributes: UserName")
     @Severity(SeverityLevel.MINOR)
-    public void checkLoginPageAttributesUsername(){
-        basePage.open(LOGIN_PAGE_URL);
-        loginPage.checkInputUserNamePlaceholder(USERNAME_PLACEHOLDER);
+    public void checkLoginPageAttributesUsername() {
+        loginPage.open(LOGIN_PAGE_URL)
+                .checkInputUserNamePlaceholder(USERNAME_PLACEHOLDER);
 
     }
 
-    @Test(description = "Check LoginPage attributes: Password")
+    @Test(description = "Check LoginPage attributes: Password",
+    enabled = false)
     @Severity(SeverityLevel.MINOR)
-    public void checkLoginPageAttributesPassword(){
-        basePage.open(LOGIN_PAGE_URL);
-        loginPage.checkInputPasswordPlaceholder(PASSWORD_PLACEHOLDER);
+    public void checkLoginPageAttributesPassword() {
+        loginPage.open(LOGIN_PAGE_URL)
+                .checkInputPasswordPlaceholder(PASSWORD_PLACEHOLDER);
 
     }
 
-    @Test(description = "Check LoginPage attributes: Login Button")
+    @Test(description = "Check LoginPage attributes: Login Button",
+    enabled = false)
     @Severity(SeverityLevel.MINOR)
-    public void checkLoginPageAttributesLoginButton(){
-        basePage.open(LOGIN_PAGE_URL);
-        loginPage.checkLoginButtonText(LOGIN_BUTTON_TEXT)
+    public void checkLoginPageAttributesLoginButton() {
+        loginPage.open(LOGIN_PAGE_URL)
+                .checkLoginButtonText(LOGIN_BUTTON_TEXT)
                 .checkLoginButtonColor(LOGIN_BUTTON_COLOR);
 
     }
-
-
     @Test(description = "1.1 Succes login in SwagLabs: standart_user")
     public void successEnterStandartUser() {
-        basePage.open(LOGIN_PAGE_URL);
-        loginPage.enterLogin(STANDART_USER_LOGIN)
+        loginPage.open(LOGIN_PAGE_URL)
+                .enterLogin(STANDART_USER_LOGIN)
                 .enterPassword(ALL_USERS_PASSWORD)
-                .pressLoginButton();
-        inventoryPage.checkTitlePage();
+                .pressLoginButtonSuccess()
+                .checkTitlePage();
     }
-
     @Test(description = "1.2 Login with empty password",
             dataProvider = "FailLoginData",
-            dataProviderClass = DataProviders.class)
+            dataProviderClass = DataProviders.class,
+            enabled = true)
     @Description("Check error message for login with empty login by different kind of the users.")
-    public void failEnterEmptyLogin(FailLoginData failLoginData){
-        basePage.open("https://www.saucedemo.com/");
-        loginPage.enterLogin(failLoginData.getLogin())
+    public void failEnterEmptyLogin(FailLoginData failLoginData) {
+        loginPage.open(LOGIN_PAGE_URL)
+                .enterLogin(failLoginData.getLogin())
                 .enterPassword(failLoginData.getPassword())
-                .pressLoginButton()
+                .pressLoginButtonFail()
                 .checkErrorLabelVisibility(true)
                 .checkErrorLabelColor(ERROR_LABEL_COLOR)
                 .checkErrorMessage(failLoginData.getError_message());

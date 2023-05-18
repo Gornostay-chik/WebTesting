@@ -4,21 +4,32 @@ import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import pages.base.BasePage;
 
+import static common.config.LOGIN_PAGE_URL;
+
 public class LoginPage extends BasePage {
-    public LoginPage(WebDriver driver) {
-        super(driver);
+    public LoginPage() {
+        PageFactory.initElements(driver, this);
     }
     By userName = By.id("user-name");//input Username
+    @FindBy(id = "user-name")
+    WebElement inputUsername;
     By password = By.xpath("//input[@name='password']");//input Password
     By loginButton = By.cssSelector(".submit-button");//Login button
     By errorTextMessage = By.xpath("//h3[@data-test='error']");//error messege
     By errorContainer = By.cssSelector(".error-message-container");//red label for error
+
+    public LoginPage open(String url){
+        driver.get(url);
+        return this;
+    }
     @Step("Enter login: {0}")
     public LoginPage enterLogin(String login){
-        driver.findElement(userName).sendKeys(login);
+        inputUsername.sendKeys(login);
         return this;
     }
     @Step("Enter password: {0}")
@@ -26,8 +37,14 @@ public class LoginPage extends BasePage {
         driver.findElement(password).sendKeys(passw);
         return this;
     }
-    @Step("Press button 'Login'")
-    public LoginPage pressLoginButton(){
+    @Step("Press button 'Login' for success login")
+    public InventoryPage pressLoginButtonSuccess(){
+        driver.findElement(loginButton).click();
+        return new InventoryPage();
+    }
+
+    @Step("Press button 'Login' for fail login")
+    public LoginPage pressLoginButtonFail(){
         driver.findElement(loginButton).click();
         return this;
     }
@@ -67,7 +84,7 @@ public class LoginPage extends BasePage {
 
     @Step("Check placeholder for Username. Expected: {loginPlaceholder}")
     public LoginPage checkInputUserNamePlaceholder(String usernamePlaceholderExpected){
-        var usernamePlaceholder = driver.findElement(userName).getAttribute("placeholder");
+        var usernamePlaceholder = inputUsername.getAttribute("placeholder");
         Assert.assertEquals(usernamePlaceholder, usernamePlaceholderExpected);
         return this;
     }

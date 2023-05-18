@@ -7,38 +7,66 @@ import pages.base.BasePage;
 import tests.base.BaseTest;
 
 import static common.config.LOGIN_PAGE_URL;
-import static common.configPages.ConfigInventoryPage.DEFAULT_SORT;
-import static common.configPages.ConfigInventoryPage.SORT_Z_A;
+import static common.configPages.ConfigInventoryPage.*;
 import static common.configPages.ConfigLoginPage.ALL_USERS_PASSWORD;
 import static common.configPages.ConfigLoginPage.STANDART_USER_LOGIN;
 
 @Feature("Tests for Inventory page")
 public class InventoryPageTest extends BaseTest {
 
-    @Test(priority=1,
-    description = "Check Inventory Page Attribute")
-    public void checkInventoryPageAttribute(){
-        basePage.open(LOGIN_PAGE_URL);
-        loginPage.enterLogin(STANDART_USER_LOGIN)
+    @Test(priority = 1,
+            description = "Check Inventory Page Attribute")
+    public void checkInventoryPageAttribute() {
+        loginPage.open(LOGIN_PAGE_URL)
+                .enterLogin(STANDART_USER_LOGIN)
                 .enterPassword(ALL_USERS_PASSWORD)
-                .pressLoginButton();
-        inventoryPage.checkTitlePage()
+                .pressLoginButtonSuccess()
+                .checkTitlePage()
                 .getCountProductPerPage()
                 .checkDefaultDropDownValue(DEFAULT_SORT);
     }
 
-    @Test(priority=2,
-    description = "Check sorting by Name",
-    dataProvider = "sortByName",
-    dataProviderClass = DataProviders.class)
-    public void checkSortingByName(String methodSort){
-        basePage.open(LOGIN_PAGE_URL);
-        loginPage.enterLogin(STANDART_USER_LOGIN)
+    @Test(priority = 2,
+            description = "Check sorting by DEFAULT (A to Z)")
+    public void checkSortingByDefault() {
+        loginPage.open(LOGIN_PAGE_URL)
+                .enterLogin(STANDART_USER_LOGIN)
                 .enterPassword(ALL_USERS_PASSWORD)
-                .pressLoginButton();
-        inventoryPage
-                .changeSort(methodSort)
-                .checkSortingByName(methodSort);
+                .pressLoginButtonSuccess()
+                .changeSort(DEFAULT_SORT)
+                .checkSortingByDefault();
     }
 
+    @Test(priority = 3,
+            description = "Check sorting by Name (Z to A)")
+    public void checkSortingByNameZtoA() {
+        loginPage.open(LOGIN_PAGE_URL)
+                .enterLogin(STANDART_USER_LOGIN)
+                .enterPassword(ALL_USERS_PASSWORD)
+                .pressLoginButtonSuccess()
+                .changeSort(SORT_Z_A)
+                .checkSortingByNameZtoA();
+    }
+
+    @Test(priority = 4,
+            description = "Check sorting by Price (Low to High)")
+    public void checkSortingByPriceLowToHigh() {
+        loginPage.open(LOGIN_PAGE_URL)
+                .enterLogin(STANDART_USER_LOGIN)
+                .enterPassword(ALL_USERS_PASSWORD)
+                .pressLoginButtonSuccess()
+                .changeSort(SORT_PRICE_LOW_HIGH)
+                .checkSortingByPriceLowToHigh();
+    }
+
+    @Test(priority = 5,
+            description = "Check sorting by Price (Low to High)")
+    public void checkSortingByPriceHighToLow() {
+        loginPage.open(LOGIN_PAGE_URL)
+                .enterLogin(STANDART_USER_LOGIN)
+                .enterPassword(ALL_USERS_PASSWORD)
+                .pressLoginButtonSuccess()
+                .changeSort(SORT_PRICE_HIGH_LOW)
+                .checkSortingByPriceHighToLow();
+    }
 }
