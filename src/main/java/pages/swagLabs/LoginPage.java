@@ -2,14 +2,11 @@ package pages.swagLabs;
 
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import pages.base.BasePage;
-
-import static common.config.LOGIN_PAGE_URL;
 
 public class LoginPage extends BasePage {
     public LoginPage() {
@@ -20,8 +17,17 @@ public class LoginPage extends BasePage {
     WebElement inputUsername;
     By password = By.xpath("//input[@name='password']");//input Password
     By loginButton = By.cssSelector(".submit-button");//Login button
-    By errorTextMessage = By.xpath("//h3[@data-test='error']");//error messege
-    By errorContainer = By.cssSelector(".error-message-container");//red label for error
+
+    @FindBy(xpath = "//h3[@data-test='error']")
+    WebElement textmesError;
+
+    @FindBy(css = ".error-message-container")
+    WebElement labelErrorMessage;//red label for error
+    /**
+     * Button "x" to close red error message
+     */
+    @FindBy(css=".error-button")
+    WebElement btnErrorClose;
 
     public LoginPage open(String url){
         driver.get(url);
@@ -50,21 +56,21 @@ public class LoginPage extends BasePage {
     }
     @Step("Check error message. Expected text error: {errorStringExpected}")
     public LoginPage checkErrorMessage(String errorStringExpected){
-        var error = driver.findElement(errorTextMessage);
-        Assert.assertEquals(error.getText(), errorStringExpected);
+        Assert.assertEquals(textmesError.getText(), errorStringExpected);
         return this;
     }
 
+    /**
+     * Check visibility of label with error message: true - the label must be visible; false - the label must be invisible
+     */
     @Step("Check visibility of the error label. Expected: {isVisible}")
     public LoginPage checkErrorLabelVisibility(Boolean isVisible){
-        var errorLabel = driver.findElement(errorTextMessage);
-        Assert.assertTrue(errorLabel.isDisplayed());
+        Assert.assertTrue(labelErrorMessage.isDisplayed());
         return this;
     }
     @Step("Check color of the error label. Expected: red")
     public LoginPage checkErrorLabelColor(String errorLabelColor){
-        var errorLabel = driver.findElement(errorContainer);
-        Assert.assertEquals(errorLabel.getCssValue("background-color"), "rgba(226, 35, 26, 1)");
+        Assert.assertEquals(labelErrorMessage.getCssValue("background-color"), "rgba(226, 35, 26, 1)");
         return this;
     }
 
@@ -95,5 +101,16 @@ public class LoginPage extends BasePage {
         Assert.assertEquals(passwordPlaceholder, passwordPlaceholderExpected);
         return this;
     }
+
+    /**
+     * Click on "x" to close error message
+     */
+    @Step("Close error message")
+    public LoginPage closeErrorMessage(){
+        btnErrorClose.click();
+        return this;
+    }
+
+
 
 }

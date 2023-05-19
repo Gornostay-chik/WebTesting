@@ -1,5 +1,7 @@
 package pages.swagLabs;
 
+import common.dataProviders.DataProviders;
+import common.objectValue.PreviewItemCard;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -8,6 +10,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
+import org.testng.annotations.Test;
 import pages.base.BasePage;
 
 import java.util.ArrayList;
@@ -16,6 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static common.CommonActions.printActualAndExpectedLists;
 import static common.config.InventoryPageConfigs.INVENTORY_TITLE;
 import static common.configPages.ConfigInventoryPage.*;
 
@@ -26,19 +30,18 @@ public class InventoryPage extends BasePage {
 
     @FindBy(css = ".title")
     WebElement title;
-    //By title = By.cssSelector(".title");
     @FindBy(css = ".inventory_item")
     List<WebElement> listItem;
-    //By item = By.cssSelector(".inventory_item");
     @FindBy(xpath = "//select[@data-test='product_sort_container']")
     WebElement sortDropDown;
-    //By bySortList = By.xpath("//select[@data-test='product_sort_container']");//Список сортировки "Name (Z to A)"
     @FindBy(xpath = "//div[@class='inventory_item']//div[@class='inventory_item_name']")
     List<WebElement> listItemName;
-    //By itemName = By.xpath("//div[@class='inventory_item']//div[@class='inventory_item_name']");//имя item
     @FindBy(css = ".inventory_item_price")
     List<WebElement> listItemPrice;
-    //By itemPrice = By.cssSelector(".inventory_item_price");
+
+    By titlePrev = By.xpath(".//div[@class='inventory_item_name']");
+    By descriptionPrev = By.xpath(".//div[@class='inventory_item_desc']");
+    By pricePrev = By.xpath(".//div[@class='inventory_item_price']");
 
     @Step("Check the title of the page")
     public InventoryPage checkTitlePage() {
@@ -76,14 +79,6 @@ public class InventoryPage extends BasePage {
                                 i1.getText().compareTo(i2.getText()))
                 )
                 .collect(Collectors.toList());
-        /*
-        listItemName.stream().forEach((i) -> {
-            System.out.println("listItemName = " + i.getText());
-        });
-        sortedListItem.stream().forEach((i) -> {
-            System.out.println("sortedListItem = " + i.getText());
-        });
-        */
         Assert.assertEquals(listItemName, sortedListItem);
         return this;
     }
@@ -96,14 +91,6 @@ public class InventoryPage extends BasePage {
                                 i2.getText().compareTo(i1.getText()))
                 )
                 .collect(Collectors.toList());
-        /*
-        listItemName.stream().forEach((i) -> {
-            System.out.println("listItemName = " + i.getText());
-        });
-        sortedListItem.stream().forEach((i) -> {
-            System.out.println("sortedListItem = " + i.getText());
-        });
-        */
         Assert.assertEquals(listItemName, sortedListItem);
         return this;
     }
@@ -120,14 +107,6 @@ public class InventoryPage extends BasePage {
                         }
                 )
                 .collect(Collectors.toList());
-        /*
-        listItemPrice.stream().forEach((i) -> {
-            System.out.println("listItemName = " + i.getText());
-        });
-        sortedListItem.stream().forEach((i) -> {
-            System.out.println("sortedListItem = " + i.getText());
-        });
-        */
         Assert.assertEquals(listItemPrice, sortedListItem);
         return this;
     }
@@ -144,15 +123,27 @@ public class InventoryPage extends BasePage {
                         }
                 )
                 .collect(Collectors.toList());
-        /*
-        listItemPrice.stream().forEach((i) -> {
-            System.out.println("listItemName = " + i.getText());
-        });
-        sortedListItem.stream().forEach((i) -> {
-            System.out.println("sortedListItem = " + i.getText());
-        });
-        */
         Assert.assertEquals(listItemPrice, sortedListItem);
+        return this;
+    }
+
+    @Step("Check previews of the products")
+    public InventoryPage checkListPreviewItem(){
+        List<PreviewItemCard> actualPreviewItemCard = new ArrayList<>();
+        for (var previewItem : listItem){
+            var previewItemTitle = previewItem.findElement(titlePrev);
+            var previewItemDescription = previewItem.findElement(descriptionPrev);
+            var previewItemPrice = previewItem.findElement(pricePrev);
+            //создали превью карточки актуального товара
+            var actualPreviewItem = PreviewItemCard.builder()
+                    .itemName(previewItemTitle.getText())
+                    .itemDescription(previewItemDescription.getText())
+                    .itemPrice(Double.valueOf(previewItemPrice.getText().replace("$","")))
+                    .build();
+            actualPreviewItemCard.add(actualPreviewItem);
+        }
+        //printActualAndExpectedLists(actualPreviewItemCard, expectedPreviewItemCard);
+        Assert.assertEquals(actualPreviewItemCard, expectedPreviewItemCard);
         return this;
     }
 

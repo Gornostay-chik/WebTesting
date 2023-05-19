@@ -1,7 +1,9 @@
 package tests.loginPageTest;
 
 import common.dataProviders.DataProviders;
+import common.objectValue.PreviewItemCard;
 import io.qameta.allure.Feature;
+import io.qameta.allure.Step;
 import org.testng.annotations.Test;
 import pages.base.BasePage;
 import tests.base.BaseTest;
@@ -69,4 +71,14 @@ public class InventoryPageTest extends BaseTest {
                 .changeSort(SORT_PRICE_HIGH_LOW)
                 .checkSortingByPriceHighToLow();
     }
+
+    @Test(description = "Check previews of the products")
+    public void checkPreviewItemCard(){
+        loginPage.open(LOGIN_PAGE_URL)
+                .enterLogin(STANDART_USER_LOGIN)
+                .enterPassword(ALL_USERS_PASSWORD)
+                .pressLoginButtonSuccess()
+                .checkListPreviewItem();
+    }
+
 }

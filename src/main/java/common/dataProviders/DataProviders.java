@@ -1,5 +1,7 @@
 package common.dataProviders;
 
+import common.objectValue.FailLoginData;
+import common.objectValue.PreviewItemCard;
 import org.testng.annotations.DataProvider;
 
 import java.util.Iterator;
@@ -13,13 +15,13 @@ public class DataProviders {
     @DataProvider(name="FailLoginData")
     public Iterator<Object[]> getFailLoginEmptyPassword(){
 
-        var emptyLoginEmptyPassword = new FailLoginData().builder()
+        var emptyLoginEmptyPassword = FailLoginData.builder()
                 .login("")
                 .password("")
                 .error_message(EMPTY_LOGIN_ERROR_TEXT)
                 .build();
 
-        var emptyLoginWithPassword = new FailLoginData().builder()
+        var emptyLoginWithPassword = FailLoginData.builder()
                 .login("")
                 .password(ALL_USERS_PASSWORD)
                 .error_message(EMPTY_LOGIN_ERROR_TEXT)
@@ -49,9 +51,8 @@ public class DataProviders {
         return listUsersEmptyPassword.iterator();
     }
 
-    @DataProvider(name="sortByName")
-    public Object[][] sortByName(){
-        //return new Object[][]{{DEFAULT_SORT}, {SORT_Z_A}, {SORT_PRICE_LOW_HIGH}, {SORT_PRICE_HIGH_LOW}};
-        return new Object[][]{{DEFAULT_SORT}};
+    @DataProvider(name="previewItemCard")
+    public Object[][] checkPreviewItem(){
+        return new Object[][]{{previewItem1}, {previewItem2}, {previewItem3}, {previewItem4}, {previewItem5}, {previewItem6}};
     }
 }

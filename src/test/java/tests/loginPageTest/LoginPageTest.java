@@ -1,14 +1,12 @@
 package tests.loginPageTest;
 
 import common.dataProviders.DataProviders;
-import common.dataProviders.FailLoginData;
+import common.objectValue.FailLoginData;
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import pages.swagLabs.LoginPage;
 import tests.base.BaseTest;
 
 import static common.config.LOGIN_PAGE_URL;
@@ -66,6 +64,17 @@ public class LoginPageTest extends BaseTest {
                 .checkErrorLabelVisibility(true)
                 .checkErrorLabelColor(ERROR_LABEL_COLOR)
                 .checkErrorMessage(failLoginData.getError_message());
+    }
+
+    @Test(description = "1.3 Close error message after failed login")
+    public void closeErrorMessageAfterFailedLogin(){
+        loginPage.open(LOGIN_PAGE_URL)
+                .enterLogin("")
+                .enterPassword("")
+                .pressLoginButtonFail()
+                .checkErrorLabelVisibility(true)
+                .closeErrorMessage()
+                .checkErrorLabelVisibility(false);
     }
 
 }

@@ -5,6 +5,7 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.testng.Assert;
 
 import java.time.Duration;
+import java.util.List;
 
 import static common.config.BROWSER;
 import static common.config.IMPLICITLY_WAIT;
@@ -25,6 +26,15 @@ public class CommonActions {
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(IMPLICITLY_WAIT));
         return driver;
+    }
+
+    public static <T> void printActualAndExpectedLists (List<T> actualList, List<T> expectedList){
+        actualList.stream().forEach((i) -> {
+            System.out.println("actualList = " + i.toString());
+        });
+        expectedList.stream().forEach((i) -> {
+            System.out.println("expectList = " + i.toString());
+        });
     }
 
 }
