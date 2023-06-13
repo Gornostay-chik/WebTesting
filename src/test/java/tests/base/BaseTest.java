@@ -1,16 +1,15 @@
 package tests.base;
 
-import common.CommonActions;
+import common.utils.DriverUtils;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.PageFactory;
 import org.testng.annotations.*;
 import pages.base.BasePage;
 import pages.swagLabs.LoginPage;
 import pages.swagLabs.InventoryPage;
 
-import static common.config.CLEAR_COOKIES_AND_STORAGE;
-import static common.config.CLOSE_BROWSER;
+import static common.configs.CommonConfig.CLEAR_COOKIES_AND_STORAGE;
+import static common.configs.CommonConfig.CLOSE_BROWSER;
 
 abstract public class BaseTest {
 
@@ -20,7 +19,7 @@ abstract public class BaseTest {
 
     @BeforeClass
     public void setUp(){
-        driver = CommonActions.createDriver();
+        driver = DriverUtils.createDriver();
         BasePage.setDriver(driver);
         loginPage = new LoginPage();
         inventoryPage = new InventoryPage();

@@ -1,27 +1,24 @@
 package pages.swagLabs;
 
-import common.dataProviders.DataProviders;
 import common.objectValue.PreviewItemCard;
+import elements.previewItem.PreviewItemDescription;
+import elements.previewItem.PreviewItemPrice;
+import elements.previewItem.PreviewItemTitle;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
-import org.testng.annotations.Test;
 import pages.base.BasePage;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static common.CommonActions.printActualAndExpectedLists;
-import static common.config.InventoryPageConfigs.INVENTORY_TITLE;
-import static common.configPages.ConfigInventoryPage.*;
+import static common.configs.CommonConfig.InventoryPageConfigs.INVENTORY_TITLE;
+import static common.configs.InventoryPageConfig.*;
 
 public class InventoryPage extends BasePage {
     public InventoryPage() {
@@ -38,6 +35,7 @@ public class InventoryPage extends BasePage {
     List<WebElement> listItemName;
     @FindBy(css = ".inventory_item_price")
     List<WebElement> listItemPrice;
+
 
     By titlePrev = By.xpath(".//div[@class='inventory_item_name']");
     By descriptionPrev = By.xpath(".//div[@class='inventory_item_desc']");
@@ -127,7 +125,7 @@ public class InventoryPage extends BasePage {
         return this;
     }
 
-    @Step("Check previews of the products")
+    @Step("Check previews of the products (find elements by relative locators)")
     public InventoryPage checkListPreviewItem(){
         List<PreviewItemCard> actualPreviewItemCard = new ArrayList<>();
         for (var previewItem : listItem){
@@ -143,6 +141,23 @@ public class InventoryPage extends BasePage {
             actualPreviewItemCard.add(actualPreviewItem);
         }
         //printActualAndExpectedLists(actualPreviewItemCard, expectedPreviewItemCard);
+        Assert.assertEquals(actualPreviewItemCard, expectedPreviewItemCard);
+        return this;
+    }
+
+    @Step("Check previews of the products (find elements with @FindBy relatively SearchContext)")
+    public InventoryPage checkListPreviewItemByElements(){
+        List<PreviewItemCard> actualPreviewItemCard = new ArrayList<>();
+        List<PreviewItemTitle> listPreviewTitle = new ArrayList<PreviewItemTitle>();
+        for(var item : listItem){
+            var actualPreviewItem = PreviewItemCard.builder()
+                    .itemName(new PreviewItemTitle(item).getText())
+                    .itemDescription(new PreviewItemDescription(item).getText())
+                    .itemPrice(new PreviewItemPrice(item).getText())
+                    .build();
+
+            actualPreviewItemCard.add(actualPreviewItem);
+        }
         Assert.assertEquals(actualPreviewItemCard, expectedPreviewItemCard);
         return this;
     }

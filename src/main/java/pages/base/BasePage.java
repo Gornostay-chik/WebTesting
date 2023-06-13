@@ -1,16 +1,8 @@
 package pages.base;
 
-import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.annotations.AfterClass;
-
-import java.time.Duration;
-
-import static common.config.EXPLICITLY_WAIT;
+import pages.swagLabs.InventoryPage;
+import pages.swagLabs.LoginPage;
 
 abstract public class BasePage {
 
@@ -20,6 +12,18 @@ abstract public class BasePage {
         driver = webDriver;
     }
 
+    public static <T extends BasePage> T page(Class<T> typePage) {
+        T newPage;
+        String str = typePage.getName();
+        //String str = typePage.getTypeName();
+        switch (str){
+            case "pages.swagLabs.InventoryPage": newPage = (T) new InventoryPage();
+            break;
+            default: newPage = (T) new LoginPage();
+            break;
+        }
+        return newPage;
+    }
     /*public WebElement waitElementIsVisible(WebElement element){
         new WebDriverWait(driver, Duration.ofSeconds(EXPLICITLY_WAIT)).until(ExpectedConditions.visibilityOf(element));
         return element;

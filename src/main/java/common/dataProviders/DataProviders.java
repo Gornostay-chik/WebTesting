@@ -1,14 +1,13 @@
 package common.dataProviders;
 
 import common.objectValue.FailLoginData;
-import common.objectValue.PreviewItemCard;
 import org.testng.annotations.DataProvider;
 
 import java.util.Iterator;
 import java.util.List;
 
-import static common.configPages.ConfigInventoryPage.*;
-import static common.configPages.ConfigLoginPage.*;
+import static common.configs.InventoryPageConfig.*;
+import static common.configs.LoginPageConfig.*;
 
 public class DataProviders {
 

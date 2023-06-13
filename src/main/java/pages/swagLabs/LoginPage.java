@@ -43,17 +43,13 @@ public class LoginPage extends BasePage {
         driver.findElement(password).sendKeys(passw);
         return this;
     }
+
     @Step("Press button 'Login' for success login")
-    public InventoryPage pressLoginButtonSuccess(){
+    public <T extends BasePage> T pressLoginButton(Class<T> typeNextPage){
         driver.findElement(loginButton).click();
-        return new InventoryPage();
+        return page(typeNextPage);
     }
 
-    @Step("Press button 'Login' for fail login")
-    public LoginPage pressLoginButtonFail(){
-        driver.findElement(loginButton).click();
-        return this;
-    }
     @Step("Check error message. Expected text error: {errorStringExpected}")
     public LoginPage checkErrorMessage(String errorStringExpected){
         Assert.assertEquals(textmesError.getText(), errorStringExpected);
